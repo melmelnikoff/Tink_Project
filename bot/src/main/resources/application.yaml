@@ -1,0 +1,8 @@
+app:
+  test: arbitrary_value
+  tgCredentials:
+    token: ${BOT_TOKEN}
+
+springdoc:
+  swagger-ui:
+    path: /swagger-ui
