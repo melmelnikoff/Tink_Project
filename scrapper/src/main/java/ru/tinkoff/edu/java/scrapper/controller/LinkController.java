@@ -1,66 +1,77 @@
 package ru.tinkoff.edu.java.scrapper.controller;
 
-import com.melnikoff.tinkoff.bot.dto.AddLinkRequest;
-import com.melnikoff.tinkoff.bot.dto.LinkResponse;
-import com.melnikoff.tinkoff.bot.dto.ListLinksResponse;
-import com.melnikoff.tinkoff.bot.dto.RemoveLinkRequest;
-import com.melnikoff.tinkoff.bot.exception.ResourceAlreadyExistsException;
-import com.melnikoff.tinkoff.bot.exception.ResourceNotFoundException;
-import jakarta.validation.Valid;
-import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import lombok.RequiredArgsConstructor;
+import org.openapitools.api.LinksApi;
+import org.openapitools.model.AddLinkRequest;
+import org.openapitools.model.LinkResponse;
+import org.openapitools.model.ListLinksResponse;
+import org.openapitools.model.RemoveLinkRequest;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.RestController;
+import ru.tinkoff.edu.java.scrapper.entity.Link;
+import ru.tinkoff.edu.java.scrapper.exception.DuplicateLinkException;
+import ru.tinkoff.edu.java.scrapper.exception.ResourceNotFoundException;
+import ru.tinkoff.edu.java.scrapper.service.LinkService;
+
+import java.net.URISyntaxException;
+import java.util.Collection;
 
 @RestController
-@RequestMapping("/api/links")
-public class LinkController {
+@RequiredArgsConstructor
+public class LinkController implements LinksApi {
 
-    // Это просто пока бд нет, чтобы потыкать, не бей
-    private final Map<Long, List<LinkResponse>> chatLinks = new HashMap<>();
+    private final LinkService linkService;
 
-    @GetMapping
-    public ListLinksResponse getTrackedLinks(@RequestHeader(name = "Tg-Chat-Id") long tgChatId) {
-        final var links = chatLinks.getOrDefault(tgChatId, new ArrayList<>());
-        return new ListLinksResponse(
-                links,
-                links.size()
-        );
+
+    @Override
+    public ResponseEntity<LinkResponse> linksDelete(Long tgChatId, RemoveLinkRequest removeLinkRequest)
+            throws ResourceNotFoundException, URISyntaxException {
+
+        Link link = linkService.remove(tgChatId, removeLinkRequest.getLink());
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(convertToLinkResponse(link));
     }
 
-    @PostMapping
-    public LinkResponse addLinkTracking(
-            @RequestHeader(name = "Tg-Chat-Id") long tgChatId,
-            @RequestBody @Valid AddLinkRequest addLinkRequest
-    ) {
-        final var links = chatLinks.computeIfAbsent(tgChatId, k -> new ArrayList<>());
-        for (LinkResponse link : links) {
-            if (link.url().equals(addLinkRequest.link())) {
-                throw new ResourceAlreadyExistsException("Link exists");
-            }
-        }
-        final var response = new LinkResponse(0L, addLinkRequest.link());
-        links.add(response);
-        return response;
+    @Override
+    public ResponseEntity<ListLinksResponse> linksGet(Long tgChatId)
+            throws ResourceNotFoundException, URISyntaxException {
+
+        Collection<Link> links = linkService.listAll(tgChatId);
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(convertToListLinkResponse(links));
     }
 
-    @DeleteMapping
-    public LinkResponse removeLinkTracking(
-            @RequestHeader(name = "Tg-Chat-Id") long tgChatId,
-            @RequestBody @Valid RemoveLinkRequest removeLinkRequest
-    ) {
-        final var oneChatLinks = chatLinks.get(tgChatId);
-        if (oneChatLinks == null) {
-            throw new ResourceNotFoundException("No such link");
-        }
-        for (int i = 0; i < oneChatLinks.size(); i++) {
-            if (removeLinkRequest.link().equals(oneChatLinks.get(i).url())) {
-                return oneChatLinks.remove(i);
-            }
-        }
 
-        throw new ResourceNotFoundException("No such link");
+    @Override
+    public ResponseEntity<LinkResponse> linksPost(Long tgChatId, AddLinkRequest addLinkRequest)
+            throws DuplicateLinkException, URISyntaxException {
+
+        Link link = linkService.add(tgChatId, addLinkRequest.getLink());
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(convertToLinkResponse(link));
     }
+
+
+    private LinkResponse convertToLinkResponse(Link link) throws URISyntaxException {
+        return LinkResponse.builder()
+                .id(link.getId())
+                .url(link.getUrl())
+                .build();
+    }
+
+    private ListLinksResponse convertToListLinkResponse(Collection<Link> linksToResponse) throws URISyntaxException {
+        return ListLinksResponse.builder()
+                .links(linksToResponse.stream().map(link -> {
+                    try {
+                        return convertToLinkResponse(link);
+                    } catch (URISyntaxException e) {
+                        throw new RuntimeException(e);
+                    }
+                }).toList())
+                .size(linksToResponse.size())
+                .build();
+    }
+
 }
