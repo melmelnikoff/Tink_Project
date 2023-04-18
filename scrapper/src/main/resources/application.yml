@@ -1,0 +1,37 @@
+app:
+  test: This is SCRAPPER ApplicationConfig!
+
+  scheduler:
+    interval: 10000
+    limit: 2
+
+github:
+  url:
+    base: https://api.github.com/repos/
+
+stackoverflow:
+  url:
+    base: https://api.stackexchange.com/2.3/questions/
+
+bot:
+  url:
+    base: http://localhost:8081
+
+webclient:
+  timeout: 1000
+
+
+springdoc:
+  swagger-ui:
+    path: /swagger-ui
+
+spring:
+  liquibase:
+    enabled: false
+  datasource:
+    url: jdbc:postgresql://localhost:5432/scrapper
+    username: postgres
+    password: password
+
+
+
