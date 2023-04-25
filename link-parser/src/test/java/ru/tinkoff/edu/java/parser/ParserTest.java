@@ -78,7 +78,7 @@ public class ParserTest {
 
     private static Stream<Arguments> getValidLinksUsersAndRepos(){
         return Stream.of(
-                Arguments.of("https://github.com/TivM/Lab8", "TivM", "Lab8"),
+                Arguments.of("https://github.com/melmelnikoff/Tink_Project", "melmelnikoff", "Tink_Project"),
                 Arguments.of("https://github.com/sanyarnd/servers/tree/master/handystuff", "sanyarnd", "servers"),
                 Arguments.of("https://github.com/pengrad/java-telegram-bot-api/tree/", "pengrad", "java-telegram-bot-api")
         );
@@ -103,8 +103,8 @@ public class ParserTest {
                 "https://stackoverflow.com/questions/create-map-in-java",
                 "",
                 "https://github.com/",
-                "https://github.com/TivM",
-                "https://github.com/TivM/ lab8"
+                "https://github.com/melmelnikoff/",
+                "https://github.com/melmelnikoff/ Tink_Project"
         ).map(Arguments::of);
     }
 }

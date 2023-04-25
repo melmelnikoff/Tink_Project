@@ -16,7 +16,7 @@ import ru.tinkoff.edu.java.scrapper.repository.TgChatRepository;
 import java.util.List;
 import java.util.Map;
 
-@Primary
+//@Primary
 @Repository
 @RequiredArgsConstructor
 public class JdbcSubscriptionRepository implements SubscriptionRepository {

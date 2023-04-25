@@ -19,7 +19,30 @@ import ru.tinkoff.edu.java.bot.exception.IncorrectRequestParameterException;
 public class RestResponseEntityExceptionHandler extends
         ResponseEntityExceptionHandler {
 
+    @Override
+    protected ResponseEntity<Object> handleHttpMessageNotReadable(HttpMessageNotReadableException ex,
+                                                                  @NotNull HttpHeaders headers,
+                                                                  @NotNull HttpStatusCode status,
+                                                                  @NotNull WebRequest request) {
+        ApiErrorResponse response = ApiErrorResponse.builder()
+                .description("Incorrect JSON")
+                .code(String.valueOf(HttpStatus.BAD_REQUEST.value()))
+                .exceptionName(ex.getClass().getName())
+                .exceptionMessage(ex.getMessage())
+                .stacktrace(ex.getStackTrace())
+                .build();
+        return new ResponseEntity<>(response, status);
+    }
 
-
-
+    @ExceptionHandler({IncorrectRequestParameterException.class,})
+    public ResponseEntity<Object> handleIncorrectRequestParameterException(IncorrectRequestParameterException ex) {
+        ApiErrorResponse response = ApiErrorResponse.builder()
+                .description("Incorrect request parameter")
+                .code(String.valueOf(HttpStatus.BAD_REQUEST.value()))
+                .exceptionName(ex.getClass().getName())
+                .exceptionMessage(ex.getMessage())
+                .stacktrace(ex.getStackTrace())
+                .build();
+        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+    }
 }

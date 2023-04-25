@@ -55,7 +55,7 @@ public class StackOverflowParserTest {
                 "https://stackoverflow.com/questions/ 1200621/how-do-iM",
                 "https://stackoverflow.com/questions/create-map-in-java",
                 "",
-                "https://github.com/TivM/ lab8"
+                "https://github.com/melmelnikoff/Tink_Project"
 
         ).map(Arguments::of);
     }

@@ -6,11 +6,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.tinkoff.edu.java.parser.Parser;
 import ru.tinkoff.edu.java.scrapper.entity.Link;
+import ru.tinkoff.edu.java.scrapper.entity.TgChat;
 import ru.tinkoff.edu.java.scrapper.exception.DuplicateLinkException;
 import ru.tinkoff.edu.java.scrapper.exception.LinkParserException;
 import ru.tinkoff.edu.java.scrapper.exception.ResourceNotFoundException;
-import ru.tinkoff.edu.java.scrapper.repository.LinkRepository;
-import ru.tinkoff.edu.java.scrapper.repository.SubscriptionRepository;
+import ru.tinkoff.edu.java.scrapper.repository.jdbc.JdbcLinkRepository;
+import ru.tinkoff.edu.java.scrapper.repository.jdbc.JdbcSubscriptionRepository;
 import ru.tinkoff.edu.java.scrapper.service.LinkService;
 
 import java.net.URI;
@@ -20,8 +21,8 @@ import java.util.Collection;
 @Service
 public class JdbcLinkService implements LinkService {
 
-    private final LinkRepository linkRepository;
-    private final SubscriptionRepository subscriptionRepository;
+    private final JdbcLinkRepository linkRepository;
+    private final JdbcSubscriptionRepository subscriptionRepository;
     private final Parser linkParser;
 
 
@@ -32,19 +33,11 @@ public class JdbcLinkService implements LinkService {
             throw new LinkParserException("Can't parse this link");
         }
 
-        Link link = buildLink(url);
-        if (linkRepository.findLinkByUrl(link.getUrl()).isEmpty()) {
-            link = linkRepository.save(link);
-        } else {
-            link = linkRepository.findLinkByUrl(link.getUrl()).get();
-        }
+        Link link = linkRepository.findLinkByUrl(url)
+                .orElseGet(() -> linkRepository.save(Link.builder().url(url).build()));
 
+        subscriptionRepository.addLinkToChat(tgChatId, link);
 
-        try {
-            subscriptionRepository.addLinkToChat(tgChatId, link);
-        } catch (DuplicateKeyException e) {
-            throw new DuplicateLinkException("This link already tracking");
-        }
         return link;
     }
 
@@ -55,14 +48,11 @@ public class JdbcLinkService implements LinkService {
             throw new LinkParserException("Can't parse this link");
         }
 
-        Link link = buildLink(url);
+        Link link = linkRepository.findLinkByUrl(url)
+                .orElseThrow(() -> new ResourceNotFoundException("Link not found"));
 
-        try {
-            link = linkRepository.findLinkByUrl(link.getUrl()).get();
-            subscriptionRepository.deleteLinkFromChat(tgChatId, link);
-        } catch (RuntimeException e) {
-            throw new ResourceNotFoundException("Link not found");
-        }
+        subscriptionRepository.deleteLinkFromChat(tgChatId, link);
+
         return link;
     }
 

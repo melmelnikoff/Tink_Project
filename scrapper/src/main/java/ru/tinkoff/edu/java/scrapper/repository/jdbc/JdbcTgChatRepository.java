@@ -16,7 +16,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-@Primary
+//@Primary
 @Repository
 @RequiredArgsConstructor
 public class JdbcTgChatRepository implements TgChatRepository {

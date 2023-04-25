@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--suppress XmlUnusedNamespaceDeclaration -->
+<databaseChangeLog
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd
+       http://www.liquibase.org/xml/ns/dbchangelog-ext
+       http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+
+    <include file="2023-04-05-CRS-1_create_link_table.sql"/>
+    <include file="2023-04-05-CRS-2_create_tg-chat_table.sql"/>
+    <include file="2023-04-05-CRS-3_create_subscription_table.sql"/>
+    <include file="2023-04-16-CRS-4_add_updates_count_column-link.sql"/>
+</databaseChangeLog>

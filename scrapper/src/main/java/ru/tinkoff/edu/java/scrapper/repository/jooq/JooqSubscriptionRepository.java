@@ -2,6 +2,7 @@ package ru.tinkoff.edu.java.scrapper.repository.jooq;
 
 import lombok.RequiredArgsConstructor;
 import org.jooq.DSLContext;
+import org.springframework.context.annotation.Primary;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Repository;
 import ru.tinkoff.edu.java.scrapper.entity.Link;
@@ -14,6 +15,7 @@ import java.util.List;
 
 import static ru.tinkoff.edu.java.scrapper.entity.jooq.Tables.*;
 
+@Primary
 @Repository
 @RequiredArgsConstructor
 public class JooqSubscriptionRepository implements SubscriptionRepository {

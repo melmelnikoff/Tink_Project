@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.tinkoff.edu.java.scrapper.entity.TgChat;
-import ru.tinkoff.edu.java.scrapper.repository.TgChatRepository;
+import ru.tinkoff.edu.java.scrapper.repository.jdbc.JdbcTgChatRepository;
 import ru.tinkoff.edu.java.scrapper.service.TgChatService;
 
 import java.time.OffsetDateTime;
@@ -13,7 +13,7 @@ import java.time.OffsetDateTime;
 @RequiredArgsConstructor
 public class JdbcTgChatService implements TgChatService {
 
-    private final TgChatRepository tgChatRepository;
+    private final JdbcTgChatRepository tgChatRepository;
 
     @Override
     @Transactional

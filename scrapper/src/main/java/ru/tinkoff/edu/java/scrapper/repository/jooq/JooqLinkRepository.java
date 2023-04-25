@@ -2,6 +2,7 @@ package ru.tinkoff.edu.java.scrapper.repository.jooq;
 
 import lombok.RequiredArgsConstructor;
 import org.jooq.DSLContext;
+import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Repository;
 import ru.tinkoff.edu.java.scrapper.entity.Link;
 import ru.tinkoff.edu.java.scrapper.repository.LinkRepository;
@@ -12,7 +13,7 @@ import java.util.Optional;
 
 import static ru.tinkoff.edu.java.scrapper.entity.jooq.Tables.LINK;
 
-
+@Primary
 @RequiredArgsConstructor
 @Repository
 public class JooqLinkRepository implements LinkRepository {
