@@ -1,35 +1,32 @@
 package ru.tinkoff.edu.java.scrapper.repository.jdbc;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.context.annotation.Primary;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.DataClassRowMapper;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
-import org.springframework.stereotype.Repository;
 import ru.tinkoff.edu.java.scrapper.entity.Link;
 import ru.tinkoff.edu.java.scrapper.entity.TgChat;
-import ru.tinkoff.edu.java.scrapper.repository.LinkRepository;
 import ru.tinkoff.edu.java.scrapper.repository.SubscriptionRepository;
-import ru.tinkoff.edu.java.scrapper.repository.TgChatRepository;
 
 import java.util.List;
 import java.util.Map;
 
-//@Primary
-@Repository
+
+//убрать subscription repository
+
 @RequiredArgsConstructor
 public class JdbcSubscriptionRepository implements SubscriptionRepository {
 
-    private final LinkRepository linkRepository;
-    private final TgChatRepository tgChatRepository;
+    private final JdbcLinkRepository linkRepository;
+    private final JdbcTgChatRepository tgChatRepository;
     private final NamedParameterJdbcTemplate jdbcTemplate;
 
     private final RowMapper<Link> linkRowMapper = new DataClassRowMapper<>(Link.class);
     private final RowMapper<TgChat> tgChatRowMapper = new DataClassRowMapper<>(TgChat.class);
 
     private static final String ADD_LINK_TO_CHAT_SQL = """
-            insert into subscription(tg_chat_id, link_id) VALUES (:chatId, :linkId);
+            insert into subscription(tg_chat_id, link_id) values (:chatId, :linkId);
             """;
 
     private static final String DELETE_LINK_FROM_CHAT_SQL = """
@@ -39,14 +36,14 @@ public class JdbcSubscriptionRepository implements SubscriptionRepository {
     private static final String FIND_LINKS_BY_CHAT_ID_SQL = """
             select id, url
             from link l
-            join subscription cl ON l.id = cl.link_id
+            join subscription cl on l.id = cl.link_id
             where cl.tg_chat_id = :id
             """;
 
     private static final String FIND_CHATS_BY_LINK_ID_SQL = """
             select id, created_at
             from tg_chat c
-            join subscription cl ON c.id = cl.tg_chat_id
+            join subscription cl on c.id = cl.tg_chat_id
             where cl.link_id = :id
             """;
 

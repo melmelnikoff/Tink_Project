@@ -2,9 +2,7 @@ package ru.tinkoff.edu.java.scrapper.client.webclient;
 
 import org.springframework.web.reactive.function.client.WebClient;
 import ru.tinkoff.edu.java.scrapper.client.api.StackOverflowClient;
-import ru.tinkoff.edu.java.scrapper.client.dto.GitHubApiResponse;
 import ru.tinkoff.edu.java.scrapper.client.dto.StackOverflowApiResponse;
-import ru.tinkoff.edu.java.scrapper.client.dto.StackOverflowItemApiResponse;
 
 public class StackOverflowWebClient implements StackOverflowClient {
 
@@ -13,7 +11,7 @@ public class StackOverflowWebClient implements StackOverflowClient {
 
 
     private final WebClient webClient;
-    private final String  baseUrl;
+    private final String baseUrl;
 
     public StackOverflowWebClient(WebClient webClient) {
         this.webClient = webClient;

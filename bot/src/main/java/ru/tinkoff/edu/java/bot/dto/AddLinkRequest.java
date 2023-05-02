@@ -1,5 +1,7 @@
 package ru.tinkoff.edu.java.bot.dto;
 
+import java.net.URI;
+
 public record AddLinkRequest(
-        String link
+        URI link
 ) {}

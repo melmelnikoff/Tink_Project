@@ -20,7 +20,7 @@ import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
-public class JdbcSubscriptionRepositoryTest extends IntegrationEnvironment{
+public class JdbcSubscriptionRepositoryTest extends IntegrationEnvironment {
 
     @Autowired
     JdbcSubscriptionRepository subscriptionRepository;

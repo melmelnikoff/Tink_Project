@@ -27,11 +27,21 @@ public class MessageSenderImpl implements MessageSender {
 
     @Override
     @SneakyThrows
-    public SendMessage sendTemplate(Long tgChatId, String templateName, Map<String, Object> root) {
+    public SendMessage sendTemplateId(Long tgChatId, String templateName, Map<String, Object> root) {
         Template template = templateResolver.getTemplate(templateName);
         Writer result = new StringWriter();
         template.process(root, result);
         return new SendMessage(tgChatId, result.toString())
+                .parseMode(ParseMode.HTML);
+    }
+
+    @Override
+    @SneakyThrows
+    public SendMessage sendTemplateUpdate(Update update, String templateName, Map<String, Object> root) {
+        Template template = templateResolver.getTemplate(templateName);
+        Writer result = new StringWriter();
+        template.process(root, result);
+        return new SendMessage(update.message().chat().id(), result.toString())
                 .parseMode(ParseMode.HTML);
     }
 }

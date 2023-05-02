@@ -67,11 +67,11 @@ public class RestResponseEntityExceptionHandler extends
     public ResponseEntity<Object> handleResourceNotFoundException(ResourceNotFoundException ex) {
         ApiErrorResponse response = ApiErrorResponse.builder()
                 .description("Not found")
-                .code(String.valueOf(HttpStatus.BAD_REQUEST.value()))
+                .code(String.valueOf(HttpStatus.NOT_FOUND.value()))
                 .exceptionName(ex.getClass().getName())
                 .exceptionMessage(ex.getMessage())
                 .build();
-        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler({DuplicateLinkException.class,})

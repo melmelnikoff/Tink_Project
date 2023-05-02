@@ -4,6 +4,12 @@ app:
   bot:
     apiKey: ${BOT_API_KEY}
 
+  queue-name: queue
+
+  exchange-name: exchange
+
+  use-queue: true
+
 server:
   port: 8081
 

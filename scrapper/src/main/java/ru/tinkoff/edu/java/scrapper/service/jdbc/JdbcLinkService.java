@@ -1,13 +1,9 @@
 package ru.tinkoff.edu.java.scrapper.service.jdbc;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.dao.DuplicateKeyException;
-import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.tinkoff.edu.java.parser.Parser;
 import ru.tinkoff.edu.java.scrapper.entity.Link;
-import ru.tinkoff.edu.java.scrapper.entity.TgChat;
-import ru.tinkoff.edu.java.scrapper.exception.DuplicateLinkException;
 import ru.tinkoff.edu.java.scrapper.exception.LinkParserException;
 import ru.tinkoff.edu.java.scrapper.exception.ResourceNotFoundException;
 import ru.tinkoff.edu.java.scrapper.repository.jdbc.JdbcLinkRepository;
@@ -18,7 +14,6 @@ import java.net.URI;
 import java.util.Collection;
 
 @RequiredArgsConstructor
-@Service
 public class JdbcLinkService implements LinkService {
 
     private final JdbcLinkRepository linkRepository;
@@ -33,8 +28,8 @@ public class JdbcLinkService implements LinkService {
             throw new LinkParserException("Can't parse this link");
         }
 
-        Link link = linkRepository.findLinkByUrl(url)
-                .orElseGet(() -> linkRepository.save(Link.builder().url(url).build()));
+        Link link = linkRepository.findLinkByUrl(url.toString())
+                .orElseGet(() -> linkRepository.save(new Link().setUrl(url.toString())));
 
         subscriptionRepository.addLinkToChat(tgChatId, link);
 
@@ -48,7 +43,7 @@ public class JdbcLinkService implements LinkService {
             throw new LinkParserException("Can't parse this link");
         }
 
-        Link link = linkRepository.findLinkByUrl(url)
+        Link link = linkRepository.findLinkByUrl(url.toString())
                 .orElseThrow(() -> new ResourceNotFoundException("Link not found"));
 
         subscriptionRepository.deleteLinkFromChat(tgChatId, link);
@@ -62,8 +57,4 @@ public class JdbcLinkService implements LinkService {
         return subscriptionRepository.findLinksByChatId(tgChatId);
     }
 
-
-    private static Link buildLink(URI url) {
-        return Link.builder().url(url).build();
-    }
 }

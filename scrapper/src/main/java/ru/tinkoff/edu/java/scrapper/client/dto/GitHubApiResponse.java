@@ -14,5 +14,6 @@ public record GitHubApiResponse(
         @JsonProperty("pushed_at") OffsetDateTime pushedAt,
         @JsonProperty("open_issues_count") Integer openIssuesCount
 
-) {}
+) {
+}
 

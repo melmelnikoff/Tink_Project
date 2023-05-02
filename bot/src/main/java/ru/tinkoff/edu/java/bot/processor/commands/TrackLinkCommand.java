@@ -12,6 +12,7 @@ import ru.tinkoff.edu.java.bot.processor.message.MessageSenderImpl;
 import ru.tinkoff.edu.java.bot.dto.LinkResponse;
 import ru.tinkoff.edu.java.bot.service.LinkServiceImpl;
 
+import java.net.URI;
 import java.util.Optional;
 
 @Slf4j
@@ -39,7 +40,7 @@ public class TrackLinkCommand implements CommandInterface {
 
         if(isReply(update)){
             String link = update.message().text();
-            Optional<LinkResponse> linkResponse = linkService.trackLink(update.message().chat().id(), link);
+            Optional<LinkResponse> linkResponse = linkService.trackLink(update.message().chat().id(), URI.create(link));
 
             return linkResponse.isPresent() ?
                     messageSender.sendMessage(update, "Add link %s".formatted(link)) :

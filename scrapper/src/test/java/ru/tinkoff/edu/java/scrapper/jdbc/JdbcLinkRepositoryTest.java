@@ -2,9 +2,7 @@ package ru.tinkoff.edu.java.scrapper.jdbc;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,14 +19,14 @@ import static java.time.OffsetDateTime.now;
 import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 
-@SpringBootTest
+@SpringBootTest(classes = ScrapperApplication.class)
 public class JdbcLinkRepositoryTest extends IntegrationEnvironment {
 
     @Autowired
     JdbcLinkRepository linkRepository;
 
     private static Link makeTestLink() {
-        return Link.builder().url(URI.create("url.com")).build();
+        return new Link().setUrl("url.com");
     }
 
     @Test
@@ -52,23 +50,9 @@ public class JdbcLinkRepositoryTest extends IntegrationEnvironment {
 
         //then
         assertAll(
-                () -> assertThat(foundLink.getId()).isEqualTo(1L),
                 () -> assertThat(foundLink.getUrl()).isEqualTo(link.getUrl())
         );
     }
-
-
-    @Test
-    @Transactional
-    @Rollback
-    @Sql("/sql/add_links.sql")
-    public void findById__dbHasLinksWithId_success() {
-        assertAll(
-                () -> assertThat(linkRepository.findById(1L)).isNotEmpty(),
-                () -> assertThat(linkRepository.findById(2L)).isNotEmpty()
-        );
-    }
-
 
     @Test
     @Transactional
@@ -79,14 +63,28 @@ public class JdbcLinkRepositoryTest extends IntegrationEnvironment {
 
         //when
         linkRepository.save(link);
-        Optional<Link> foundLink = linkRepository.findLinkByUrl(URI.create("url.com"));
+        Optional<Link> foundLink = linkRepository.findLinkByUrl("url.com");
 
         //then
         assertAll(
                 () -> assertThat(foundLink).isNotEmpty(),
                 () -> assertThat(foundLink.get().getUrl()).isEqualTo(link.getUrl())
         );
+    }
 
+    @Test
+    @Transactional
+    @Rollback
+    @Sql("/sql/add_links.sql")
+    public void findById__dbHasLinksWithId_success() {
+        long id1= linkRepository.findLinkByUrl("https://link.com").get().getId();
+        long id2 = linkRepository.findLinkByUrl("https://newlink.com").get().getId();
+
+
+        assertAll(
+                () -> assertThat(linkRepository.findById(id1)).isNotEmpty(),
+                () -> assertThat(linkRepository.findById(id2)).isNotEmpty()
+        );
     }
 
     @Test
@@ -95,7 +93,7 @@ public class JdbcLinkRepositoryTest extends IntegrationEnvironment {
     @Sql("/sql/add_links.sql")
     public void deleteById__dbHasLinkWithId_success() {
         //given
-        var id = linkRepository.findLinkByUrl(URI.create("https://link.com")).get().getId();
+        var id = linkRepository.findLinkByUrl("https://link.com").get().getId();
 
         //when
         linkRepository.deleteById(id);
@@ -117,10 +115,10 @@ public class JdbcLinkRepositoryTest extends IntegrationEnvironment {
     void findCheckedLongTimeAgoLinks__dbHasLinks_success() {
         List<Link> links = linkRepository.findCheckedLongTimeAgoLinks(4);
         assertAll(
-                () -> assertThat(links.get(0).getUrl()).isEqualTo(URI.create("https://link4.com")),
-                () -> assertThat(links.get(1).getUrl()).isEqualTo(URI.create("https://link2.com")),
-                () -> assertThat(links.get(2).getUrl()).isEqualTo(URI.create("https://link3.com")),
-                () -> assertThat(links.get(3).getUrl()).isEqualTo(URI.create("https://link1.com"))
+                () -> assertThat(links.get(0).getUrl()).isEqualTo("https://link4.com"),
+                () -> assertThat(links.get(1).getUrl()).isEqualTo("https://link2.com"),
+                () -> assertThat(links.get(2).getUrl()).isEqualTo("https://link3.com"),
+                () -> assertThat(links.get(3).getUrl()).isEqualTo("https://link1.com")
         );
 
     }

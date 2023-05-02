@@ -36,7 +36,7 @@ public class GetListLinksCommand implements CommandInterface {
            return messageSender.sendMessage(update,
                    "You are not tracking links yet. Try using /track to start tracking links");
         }
-        return messageSender.sendTemplate(update, "links.ftl", Map.of("links", links));
+        return messageSender.sendTemplateUpdate(update, "links.ftl", Map.of("links", links));
     }
 
     @Override

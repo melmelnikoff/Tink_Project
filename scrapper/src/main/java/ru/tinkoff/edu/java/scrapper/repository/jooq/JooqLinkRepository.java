@@ -2,20 +2,16 @@ package ru.tinkoff.edu.java.scrapper.repository.jooq;
 
 import lombok.RequiredArgsConstructor;
 import org.jooq.DSLContext;
-import org.springframework.context.annotation.Primary;
-import org.springframework.stereotype.Repository;
 import ru.tinkoff.edu.java.scrapper.entity.Link;
 import ru.tinkoff.edu.java.scrapper.repository.LinkRepository;
 
-import java.net.URI;
 import java.util.List;
 import java.util.Optional;
 
 import static ru.tinkoff.edu.java.scrapper.entity.jooq.Tables.LINK;
 
-@Primary
+
 @RequiredArgsConstructor
-@Repository
 public class JooqLinkRepository implements LinkRepository {
     private final DSLContext create;
 
@@ -23,7 +19,7 @@ public class JooqLinkRepository implements LinkRepository {
     public Link save(Link link) {
         return create
                 .insertInto(LINK, LINK.URL)
-                .values(link.getUrl().toString())
+                .values(link.getUrl())
                 .returningResult(LINK.fields())
                 .fetchOneInto(Link.class);
     }
@@ -56,11 +52,11 @@ public class JooqLinkRepository implements LinkRepository {
     }
 
     @Override
-    public Optional<Link> findLinkByUrl(URI url) {
+    public Optional<Link> findLinkByUrl(String url) {
         return create
                 .select(LINK.ID, LINK.URL, LINK.LAST_CHECK_TIME, LINK.UPDATED_AT, LINK.UPDATES_COUNT)
                 .from(LINK)
-                .where(LINK.URL.eq(url.toString()))
+                .where(LINK.URL.eq(url))
                 .fetchOptionalInto(Link.class);
     }
 

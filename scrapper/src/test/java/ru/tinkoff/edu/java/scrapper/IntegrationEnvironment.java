@@ -7,6 +7,7 @@ import liquibase.exception.LiquibaseException;
 import liquibase.resource.DirectoryResourceAccessor;
 import org.jooq.DSLContext;
 import org.springframework.boot.jdbc.DataSourceBuilder;
+import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
@@ -18,11 +19,14 @@ import org.springframework.transaction.PlatformTransactionManager;
 import org.testcontainers.containers.JdbcDatabaseContainer;
 import org.testcontainers.containers.PostgreSQLContainer;
 import org.testcontainers.junit.jupiter.Testcontainers;
+import ru.tinkoff.edu.java.scrapper.configuration.acess.JdbcAccessConfig;
+import ru.tinkoff.edu.java.scrapper.configuration.acess.JpaAccessConfig;
 import ru.tinkoff.edu.java.scrapper.repository.jdbc.JdbcLinkRepository;
 import ru.tinkoff.edu.java.scrapper.repository.jdbc.JdbcSubscriptionRepository;
 import ru.tinkoff.edu.java.scrapper.repository.jdbc.JdbcTgChatRepository;
 import ru.tinkoff.edu.java.scrapper.repository.jooq.JooqLinkRepository;
 import ru.tinkoff.edu.java.scrapper.repository.jooq.JooqSubscriptionRepository;
+import ru.tinkoff.edu.java.scrapper.repository.jpa.JpaLinkRepository;
 
 import javax.sql.DataSource;
 import java.io.File;
@@ -33,7 +37,7 @@ import java.sql.SQLException;
 @Testcontainers
 @ContextConfiguration(classes = IntegrationEnvironment.IntegrationEnvironmentConfiguration.class)
 public abstract class IntegrationEnvironment {
-    @Configuration
+    @TestConfiguration
     static class IntegrationEnvironmentConfiguration {
 
         @Bean
@@ -44,35 +48,6 @@ public abstract class IntegrationEnvironment {
                     .username(DB_CONTAINER.getUsername())
                     .password(DB_CONTAINER.getPassword())
                     .build();
-        }
-
-        @Bean
-        NamedParameterJdbcTemplate jdbcTemplate() {
-            return new NamedParameterJdbcTemplate(dataSource());
-        }
-
-        @Bean
-        JdbcTgChatRepository jdbcTgChatRepository() {
-            return new JdbcTgChatRepository(jdbcTemplate());
-        }
-
-        @Bean
-        JdbcLinkRepository jdbcLinkRepository() {
-            return new JdbcLinkRepository(jdbcTemplate());
-        }
-
-        @Bean
-        JdbcSubscriptionRepository jdbcSubscriptionRepository() {
-            return new JdbcSubscriptionRepository(jdbcLinkRepository(), jdbcTgChatRepository(), jdbcTemplate());
-        }
-
-
-
-        @Bean
-        PlatformTransactionManager platformTransactionManager() {
-            JdbcTransactionManager transactionManager = new JdbcTransactionManager();
-            transactionManager.setDataSource(dataSource());
-            return transactionManager;
         }
     }
 

@@ -3,7 +3,6 @@ package ru.tinkoff.edu.java.scrapper.client.dto;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.time.OffsetDateTime;
-import java.util.Set;
 
 public record StackOverflowItemApiResponse(
         @JsonProperty("question_id") long questionId,
@@ -14,4 +13,5 @@ public record StackOverflowItemApiResponse(
         @JsonProperty("link") String link,
         @JsonProperty("answer_count") Integer answerCount
 
-) {}
+) {
+}

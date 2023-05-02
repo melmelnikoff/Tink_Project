@@ -32,11 +32,6 @@ public class MessageSenderTest {
     static void setUp() {
         templateResolver = new Configuration(Configuration.VERSION_2_3_31);
 
-//        File templatesDir = new File(MessageSender.class
-//                .getClassLoader()
-//                .getResource("templates")
-//                .getFile()
-//        );
         File templatesDir = new File("src/test/resources/templates");
 
         templateResolver.setDefaultEncoding("UTF-8");
@@ -55,7 +50,7 @@ public class MessageSenderTest {
         );
 
         //when
-        SendMessage message = messageSender.sendTemplate(update, "links.ftl", Map.of("links", links));
+        SendMessage message = messageSender.sendTemplateUpdate(update, "links.ftl", Map.of("links", links));
 
         //then
         Object text = message.getParameters().get("text");

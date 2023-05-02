@@ -12,7 +12,7 @@ public class PropertiesConfig {
     }
 
     @Bean
-    public long schedulerLimitForUpdateLinks(ApplicationConfig config){
+    public long schedulerLimitForUpdateLinks(ApplicationConfig config) {
         return config.scheduler().limit();
     }
 

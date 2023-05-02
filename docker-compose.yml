@@ -37,10 +37,33 @@ services:
       - backend
 
 
+  rabbitmq:
+    container_name: rabbitmq
+    hostname: rabbitmq
+    image: 'rabbitmq:3.6-management-alpine'
+    ports:
+      - '5672:5672'
+      - '15672:15672'
+    environment:
+      AMQP_URL: 'amqp://rabbitmq?connection_attempts=5&retry_delay=5'
+      RABBITMQ_DEFAULT_USER: "guest"
+      RABBITMQ_DEFAULT_PASS: "guest"
+
+    volumes:
+      - rabbitmq-data:/var/lib/rabbitmq
+
+
+
+
 
 #volumes:
 #  postgresql-data:
 #    name: postgres-data-volume
+
+volumes:
+  rabbitmq-data:
+    name: rabbitmq-data-volume
+    driver: local
 
 networks:
   backend:

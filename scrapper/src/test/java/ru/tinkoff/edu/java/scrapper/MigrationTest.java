@@ -4,6 +4,9 @@ import org.junit.jupiter.api.Test;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 
@@ -16,20 +19,21 @@ public class MigrationTest extends IntegrationEnvironment {
     void migrationsAreRunningSuccessfully() throws Exception {
             //given
         try (var connection = DB_CONTAINER.createConnection("")){
-            var preparedStatementForUpdate = connection.prepareStatement
+            PreparedStatement preparedStatementForUpdate = connection.prepareStatement
                     ("INSERT INTO tg_chat(id, created_at) VALUES (1, now())");
 
-            var preparedStatementForQuery = connection.prepareStatement("SELECT * FROM tg_chat");
+            PreparedStatement preparedStatementForQuery = connection.prepareStatement("SELECT * FROM tg_chat");
 
             //when
-            var resultUpdate = preparedStatementForUpdate.executeUpdate();
+            int resultUpdate = preparedStatementForUpdate.executeUpdate();
 
-            var resultQuery = preparedStatementForQuery.executeQuery();
+            ResultSet resultQuery = preparedStatementForQuery.executeQuery();
             resultQuery.next();
 
             //then
             assertAll(
-                    () -> assertEquals(1, resultUpdate)
+                    () -> assertEquals(1, resultUpdate),
+                    () -> assertEquals(1, resultQuery.getLong("id"))
             );
         }
     }
