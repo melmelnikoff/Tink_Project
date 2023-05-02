@@ -21,7 +21,8 @@ import java.util.concurrent.TimeUnit;
 @Configuration
 public class ClientConfig {
 
-    @Value("${webclient.timeout}") int timeout;
+    @Value("${webclient.timeout}")
+    int timeout;
 
     @Bean
     public WebClient webClient() {

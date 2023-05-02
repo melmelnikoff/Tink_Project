@@ -1,17 +1,18 @@
 package ru.tinkoff.edu.java.bot.client.api;
 
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.ResponseEntity;
 import ru.tinkoff.edu.java.bot.dto.LinkResponse;
 import ru.tinkoff.edu.java.bot.dto.ListLinksResponse;
 
+import java.net.URI;
+import java.util.Optional;
+
 public interface ScrapperClient {
 
-    LinkResponse linksDelete(Long tgChatId, String url);
+    Optional<LinkResponse> linksDelete(Long tgChatId, URI url);
 
     ListLinksResponse linksGet(Long tgChatId);
 
-    LinkResponse linksPost(Long tgChatId, String url);
+    Optional<LinkResponse> linksPost(Long tgChatId, URI url);
 
     Void tgChatIdDelete(Long tgChatId);
 

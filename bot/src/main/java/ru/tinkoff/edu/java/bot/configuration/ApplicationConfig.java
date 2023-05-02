@@ -6,6 +6,16 @@ import org.springframework.validation.annotation.Validated;
 
 @Validated
 @ConfigurationProperties(prefix = "app", ignoreUnknownFields = false)
-public record ApplicationConfig(@NotNull String test, Bot bot) {
+public record ApplicationConfig(
+        @NotNull String test,
+        Bot bot,
+        @NotNull
+        String queueName,
+        @NotNull
+        String exchangeName,
+        @NotNull
+        Boolean useQueue
+
+) {
     record Bot(@NotNull String apiKey){}
 }

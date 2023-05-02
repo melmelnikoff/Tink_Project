@@ -12,6 +12,7 @@ import ru.tinkoff.edu.java.bot.processor.message.MessageSenderImpl;
 import ru.tinkoff.edu.java.bot.dto.LinkResponse;
 import ru.tinkoff.edu.java.bot.service.LinkServiceImpl;
 
+import java.net.URI;
 import java.util.Optional;
 
 @Slf4j
@@ -38,7 +39,7 @@ public class UntrackLinkCommand implements CommandInterface {
     public SendMessage process(Update update) {
         if(isReply(update)){
             String link = update.message().text();
-            Optional<LinkResponse> linkResponse = linkService.untrackLink(update.message().chat().id(), link);
+            Optional<LinkResponse> linkResponse = linkService.untrackLink(update.message().chat().id(), URI.create(link));
 
             return linkResponse.isPresent() ?
                     messageSender.sendMessage(update, "Stop tracking link %s".formatted(link)) :

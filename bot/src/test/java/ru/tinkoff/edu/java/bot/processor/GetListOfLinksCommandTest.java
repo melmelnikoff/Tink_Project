@@ -49,12 +49,12 @@ public class GetListOfLinksCommandTest {
         // then
         verify(linkService, times(1)).getAllLinks(tgChatId);
         verify(messageSender, times(1))
-                .sendTemplate(update, "links.ftl", Map.of("links", links));
+                .sendTemplateUpdate(update, "links.ftl", Map.of("links", links));
 
 
     }
 
-    //???
+
     @Test
     void process__processGetAllLinksWithNoLinks_returnSpecialMessage(){
         // given

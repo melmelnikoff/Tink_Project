@@ -1,5 +1,6 @@
 package ru.tinkoff.edu.java.scrapper.client.dto;
 
+import java.net.URI;
 import java.util.List;
 
 public record LinkUpdateRequest(

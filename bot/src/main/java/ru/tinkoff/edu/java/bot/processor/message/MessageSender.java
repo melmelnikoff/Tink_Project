@@ -7,14 +7,11 @@ import java.util.Map;
 
 public interface MessageSender {
 
-    SendMessage sendTemplate(Long tgChatId, String templateName, Map<String, Object> root);
+    SendMessage sendTemplateId(Long tgChatId, String templateName, Map<String, Object> root);
 
-    default SendMessage sendMessage(Update update, String text){
-        return sendMessage(update, text);
-    }
-    default SendMessage sendTemplate(Update update, String templateName, Map<String, Object> root){
-        return sendTemplate(update, templateName, Map.of());
-    }
+    SendMessage sendMessage(Update update, String text);
+
+    SendMessage sendTemplateUpdate(Update update, String templateName, Map<String, Object> root);
 
 }
 

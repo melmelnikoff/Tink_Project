@@ -4,6 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.openapitools.model.ApiErrorResponse;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatusCode;
+import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.client.ClientResponse;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
@@ -14,6 +15,9 @@ import ru.tinkoff.edu.java.bot.dto.AddLinkRequest;
 import ru.tinkoff.edu.java.bot.dto.LinkResponse;
 import ru.tinkoff.edu.java.bot.dto.ListLinksResponse;
 import ru.tinkoff.edu.java.bot.dto.RemoveLinkRequest;
+
+import java.net.URI;
+import java.util.Optional;
 
 @Slf4j
 public class ScrapperWebClient implements ScrapperClient {
@@ -37,15 +41,16 @@ public class ScrapperWebClient implements ScrapperClient {
     }
 
     @Override
-    public LinkResponse linksDelete(Long tgChatId, String url) {
+    public Optional<LinkResponse> linksDelete(Long tgChatId, URI url) {
         return webClient
                 .method(HttpMethod.DELETE)
                 .uri(BASE_URL + LINKS_URI)
-                .header(TG_CHAT_ID_HEADER, Long.toString(tgChatId))
+                .header(TG_CHAT_ID_HEADER, tgChatId.toString())
                 .bodyValue(new RemoveLinkRequest(url))
                 .retrieve()
                 .bodyToMono(LinkResponse.class)
-                .block();
+                .onErrorResume(exception -> Mono.empty())
+                .blockOptional();
     }
 
     @Override
@@ -53,22 +58,24 @@ public class ScrapperWebClient implements ScrapperClient {
         return webClient
                 .get()
                 .uri(BASE_URL + LINKS_URI)
-                .header(TG_CHAT_ID_HEADER, Long.toString(tgChatId))
+                .header(TG_CHAT_ID_HEADER, tgChatId.toString())
                 .retrieve()
                 .bodyToMono(ListLinksResponse.class)
+                .onErrorResume(exception -> Mono.empty())
                 .block();
     }
 
     @Override
-    public LinkResponse linksPost(Long tgChatId, String url) {
+    public Optional<LinkResponse> linksPost(Long tgChatId, URI url) {
         return webClient
                 .post()
                 .uri(BASE_URL + LINKS_URI)
-                .header(TG_CHAT_ID_HEADER, Long.toString(tgChatId))
-                .bodyValue(new AddLinkRequest(url))
+                .header(TG_CHAT_ID_HEADER, tgChatId.toString())
+                .body(BodyInserters.fromValue(new AddLinkRequest(url)))
                 .retrieve()
                 .bodyToMono(LinkResponse.class)
-                .block();
+                .onErrorResume(exception -> Mono.empty())
+                .blockOptional();
     }
 
     @Override

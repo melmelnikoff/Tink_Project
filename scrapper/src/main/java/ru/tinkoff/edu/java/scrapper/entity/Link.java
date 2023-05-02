@@ -1,22 +1,41 @@
 package ru.tinkoff.edu.java.scrapper.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.experimental.Accessors;
 
-import java.net.URI;
 import java.time.OffsetDateTime;
+import java.util.HashSet;
+import java.util.Set;
 
-
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
-@Builder
+@Getter
+@Setter
+@Entity
+@Table(name = "link")
+@Accessors(chain = true)
 public class Link {
+
+    @Id
+    @Column(name = "id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private URI url;
+
+    @Column(name = "url")
+    private String url;
+
+    @Column(name = "last_check_time")
     private OffsetDateTime lastCheckTime;
+
+    @Column(name = "updated_at")
     private OffsetDateTime updatedAt;
+
+    @Column(name = "updates_count")
     private Integer updatesCount;
+
+    @ManyToMany(cascade = CascadeType.REMOVE,
+            mappedBy = "links")
+    private Set<TgChat> tgChats = new HashSet<>();
+
+
 }

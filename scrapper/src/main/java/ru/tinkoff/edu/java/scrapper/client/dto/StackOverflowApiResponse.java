@@ -6,4 +6,5 @@ import java.util.List;
 
 public record StackOverflowApiResponse(
         @JsonProperty("items") List<StackOverflowItemApiResponse> items
-) {}
+) {
+}

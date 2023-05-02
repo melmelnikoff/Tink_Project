@@ -2,22 +2,18 @@ package ru.tinkoff.edu.java.scrapper.repository.jdbc;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.context.annotation.Primary;
 import org.springframework.dao.support.DataAccessUtils;
 import org.springframework.jdbc.core.DataClassRowMapper;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
-import org.springframework.stereotype.Repository;
 import ru.tinkoff.edu.java.scrapper.entity.Link;
 import ru.tinkoff.edu.java.scrapper.repository.LinkRepository;
 
-import java.net.URI;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-//@Primary
-@Repository
+
 @RequiredArgsConstructor
 @Slf4j
 public class JdbcLinkRepository implements LinkRepository {
@@ -55,7 +51,7 @@ public class JdbcLinkRepository implements LinkRepository {
     public Link save(Link link) {
         return jdbcTemplate.queryForObject(
                 SAVE_SQL,
-                Map.of("url", link.getUrl().toString()),
+                Map.of("url", link.getUrl()),
                 rowMapper);
     }
 
@@ -83,10 +79,10 @@ public class JdbcLinkRepository implements LinkRepository {
     }
 
     @Override
-    public Optional<Link> findLinkByUrl(URI url) {
+    public Optional<Link> findLinkByUrl(String url) {
         return Optional.ofNullable(
                 DataAccessUtils.singleResult(
-                        jdbcTemplate.query(FIND_LINK_BY_URL_SQL, Map.of("url", url.toString()), rowMapper)
+                        jdbcTemplate.query(FIND_LINK_BY_URL_SQL, Map.of("url", url), rowMapper)
                 )
         );
     }

@@ -29,7 +29,7 @@ public class HelpCommand implements CommandInterface {
 
     @Override
     public SendMessage process(Update update) {
-        return messageSender.sendTemplate(update, "help.ftl", Map.of("commands", commands));
+        return messageSender.sendTemplateUpdate(update, "help.ftl", Map.of("commands", commands));
     }
 
     @Override

@@ -15,6 +15,7 @@ import ru.tinkoff.edu.java.scrapper.exception.DuplicateLinkException;
 import ru.tinkoff.edu.java.scrapper.exception.ResourceNotFoundException;
 import ru.tinkoff.edu.java.scrapper.service.LinkService;
 
+import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Collection;
 
@@ -57,7 +58,7 @@ public class LinkController implements LinksApi {
     private LinkResponse convertToLinkResponse(Link link) throws URISyntaxException {
         return LinkResponse.builder()
                 .id(link.getId())
-                .url(link.getUrl())
+                .url(URI.create(link.getUrl()))
                 .build();
     }
 

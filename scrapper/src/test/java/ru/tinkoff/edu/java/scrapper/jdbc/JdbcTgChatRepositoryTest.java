@@ -26,10 +26,9 @@ public class JdbcTgChatRepositoryTest extends IntegrationEnvironment {
 
 
     private static TgChat makeTestChat() {
-        return TgChat.builder()
-                .id(1L)
-                .createdAt(now())
-                .build();
+        return new TgChat()
+                .setId(1L)
+                .setCreatedAt(now());
     }
 
     @Test
