@@ -1,14 +1,20 @@
 package ru.tinkoff.edu.java.scrapper.entity;
 
-import jakarta.persistence.*;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
+import jakarta.persistence.Table;
+import java.time.OffsetDateTime;
+import java.util.HashSet;
+import java.util.Set;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 import org.hibernate.annotations.CreationTimestamp;
-
-import java.time.OffsetDateTime;
-import java.util.HashSet;
-import java.util.Set;
 
 @Getter
 @Setter
@@ -27,14 +33,9 @@ public class TgChat {
 
     @ManyToMany(cascade = CascadeType.REMOVE)
     @JoinTable(name = "subscription",
-            joinColumns = @JoinColumn(name = "tg_chat_id"),
-            inverseJoinColumns = @JoinColumn(name = "link_id"))
+               joinColumns = @JoinColumn(name = "tg_chat_id"),
+               inverseJoinColumns = @JoinColumn(name = "link_id"))
 
     private Set<Link> links = new HashSet<>();
-
-
-//    @ManyToMany(cascade = CascadeType.REMOVE,
-//            mappedBy = "tgChats")
-//    private Set<LinkEntity> links = new HashSet<>();
 
 }

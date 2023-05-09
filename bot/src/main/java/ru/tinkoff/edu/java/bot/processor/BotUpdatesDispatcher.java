@@ -5,9 +5,8 @@ import com.pengrad.telegrambot.UpdatesListener;
 import com.pengrad.telegrambot.model.BotCommand;
 import com.pengrad.telegrambot.model.Update;
 import com.pengrad.telegrambot.request.SendMessage;
-import lombok.RequiredArgsConstructor;
-
 import java.util.List;
+import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 public class BotUpdatesDispatcher implements UpdatesListener {
@@ -16,8 +15,6 @@ public class BotUpdatesDispatcher implements UpdatesListener {
     private final TelegramBot bot;
 
     private final CommandProcessor commandProcessor;
-
-
 
     @Override
     public int process(List<Update> updates) {
@@ -44,7 +41,6 @@ public class BotUpdatesDispatcher implements UpdatesListener {
     private SendMessage unexpectedMessage(Update update) {
         return new SendMessage(update.message().chat().id(), MESSAGE);
     }
-
 
     public List<BotCommand> getCommands() {
         return commandProcessor.getCommands();

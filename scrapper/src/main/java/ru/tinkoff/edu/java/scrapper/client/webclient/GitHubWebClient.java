@@ -8,7 +8,6 @@ public class GitHubWebClient implements GitHubClient {
     private static final String BASE_URL = "https://api.github.com/repos/";
     private static final String SLASH = "/";
 
-
     private final WebClient webClient;
     private final String baseUrl;
 
@@ -25,10 +24,10 @@ public class GitHubWebClient implements GitHubClient {
     @Override
     public GitHubApiResponse fetchRepository(String userName, String repository) {
         return webClient
-                .get()
-                .uri(baseUrl + userName + SLASH + repository)
-                .retrieve()
-                .bodyToMono(GitHubApiResponse.class)
-                .block();
+            .get()
+            .uri(baseUrl + userName + SLASH + repository)
+            .retrieve()
+            .bodyToMono(GitHubApiResponse.class)
+            .block();
     }
 }

@@ -1,14 +1,12 @@
 package ru.tinkoff.edu.java.parser.configuration;
 
+import java.util.List;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import ru.tinkoff.edu.java.parser.GitHubParser;
 import ru.tinkoff.edu.java.parser.Parser;
 import ru.tinkoff.edu.java.parser.ParserInterface;
 import ru.tinkoff.edu.java.parser.StackOverflowParser;
-import ru.tinkoff.edu.java.parser.parseresult.ParseResult;
-
-import java.util.List;
 
 @Configuration
 public class ParserConfig {

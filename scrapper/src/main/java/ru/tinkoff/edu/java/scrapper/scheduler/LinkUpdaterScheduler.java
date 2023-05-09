@@ -1,6 +1,5 @@
 package ru.tinkoff.edu.java.scrapper.scheduler;
 
-
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;

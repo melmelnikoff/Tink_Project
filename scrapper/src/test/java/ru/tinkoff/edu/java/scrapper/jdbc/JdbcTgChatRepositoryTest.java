@@ -10,7 +10,6 @@ import ru.tinkoff.edu.java.scrapper.IntegrationEnvironment;
 import ru.tinkoff.edu.java.scrapper.entity.TgChat;
 import ru.tinkoff.edu.java.scrapper.repository.jdbc.JdbcLinkRepository;
 import ru.tinkoff.edu.java.scrapper.repository.jdbc.JdbcTgChatRepository;
-
 import static java.time.OffsetDateTime.now;
 import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
@@ -24,11 +23,10 @@ public class JdbcTgChatRepositoryTest extends IntegrationEnvironment {
     @Autowired
     JdbcLinkRepository linkRepository;
 
-
     private static TgChat makeTestChat() {
         return new TgChat()
-                .setId(1L)
-                .setCreatedAt(now());
+            .setId(100L)
+            .setCreatedAt(now());
     }
 
     @Test
@@ -48,14 +46,12 @@ public class JdbcTgChatRepositoryTest extends IntegrationEnvironment {
 
         //when
         tgChatRepository.save(chat);
-        TgChat foundChat = tgChatRepository.findAll().get(0);
 
         //then
         assertAll(
-                () -> assertThat(foundChat.getId()).isEqualTo(1L)
+            () -> assertThat(tgChatRepository.findById(100L)).isNotEmpty()
         );
     }
-
 
     @Test
     @Transactional
@@ -63,11 +59,10 @@ public class JdbcTgChatRepositoryTest extends IntegrationEnvironment {
     @Sql("/sql/add_chats.sql")
     public void findById__dbHasChatWithId_success() {
         assertAll(
-                () -> assertThat(tgChatRepository.findById(1L)).isNotEmpty(),
-                () -> assertThat(tgChatRepository.findById(2L)).isNotEmpty()
+            () -> assertThat(tgChatRepository.findById(1L)).isNotEmpty(),
+            () -> assertThat(tgChatRepository.findById(2L)).isNotEmpty()
         );
     }
-
 
     @Test
     @Transactional

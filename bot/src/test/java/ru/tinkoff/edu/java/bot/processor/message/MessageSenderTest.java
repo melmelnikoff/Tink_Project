@@ -5,6 +5,10 @@ import com.pengrad.telegrambot.model.Message;
 import com.pengrad.telegrambot.model.Update;
 import com.pengrad.telegrambot.request.SendMessage;
 import freemarker.template.Configuration;
+import java.io.File;
+import java.net.URI;
+import java.util.List;
+import java.util.Map;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeAll;
@@ -13,19 +17,14 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.test.util.ReflectionTestUtils;
 import ru.tinkoff.edu.java.bot.dto.LinkResponse;
-
-import java.io.File;
-import java.net.URI;
-import java.util.List;
-import java.util.Map;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @Slf4j
 @ExtendWith(MockitoExtension.class)
 public class MessageSenderTest {
+    private static final String linksTemplate = "links.ftl";
     static Configuration templateResolver;
     MessageSenderImpl messageSender = new MessageSenderImpl(templateResolver);
-
 
     @BeforeAll
     @SneakyThrows
@@ -38,33 +37,33 @@ public class MessageSenderTest {
         templateResolver.setDirectoryForTemplateLoading(templatesDir);
     }
 
-
     @Test
-    void sendTemplate__sendLinksTemplate_returnValidTemplate(){
+    void sendTemplate__sendLinksTemplate_returnValidTemplate() {
         //given
         Update update = getUpdate();
 
         List<LinkResponse> links = List.of(
-                new LinkResponse(1L, URI.create("https://github.com/")),
-                new LinkResponse(2L, URI.create("https://stackoverflow.com/"))
+            new LinkResponse(1L, URI.create("https://github.com/")),
+            new LinkResponse(2L, URI.create("https://stackoverflow.com/"))
         );
 
         //when
-        SendMessage message = messageSender.sendTemplateUpdate(update, "links.ftl", Map.of("links", links));
+        SendMessage message = messageSender.sendTemplateUpdate(update, linksTemplate, Map.of("links", links));
 
         //then
-        Object text = message.getParameters().get("text");
+        Object text = message.getParameters().get("text")
+            .toString()
+            .replaceAll("\r", ""); //to ignore diff in line separator
 
         assertThat(text).isEqualTo("""
-             <b>Your links:</b>
-                 <a href="https://github.com/">https://github.com/</a>
-                 <a href="https://stackoverflow.com/">https://stackoverflow.com/</a>
-             """);
-
+            <b>Your links:</b>
+                <a href="https://github.com/">https://github.com/</a>
+                <a href="https://stackoverflow.com/">https://stackoverflow.com/</a>
+            """);
 
     }
 
-    Update getUpdate(){
+    Update getUpdate() {
         //Update -> Message -> Chat -> Id
         Update update = new Update();
         Message message = new Message();

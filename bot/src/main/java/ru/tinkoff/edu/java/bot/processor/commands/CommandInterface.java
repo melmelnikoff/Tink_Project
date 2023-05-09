@@ -11,14 +11,13 @@ public interface CommandInterface {
 
     SendMessage process(Update update);
 
-
     default BotCommand toApiCommand() {
         return new BotCommand(command(), description());
     }
 
-    default boolean supports(Update update){
-        return update.message() != null &&
-                update.message().text() != null &&
-                update.message().text().startsWith(command());
+    default boolean supports(Update update) {
+        return update.message() != null
+            && update.message().text() != null
+            && update.message().text().startsWith(command());
     }
 }

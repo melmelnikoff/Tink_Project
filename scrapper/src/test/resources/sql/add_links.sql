@@ -1,7 +1,7 @@
 INSERT INTO link(url)
-VALUES('https://link.com');
+VALUES ('https://link.com');
 
 INSERT INTO link(url)
-VALUES('https://newlink.com');
+VALUES ('https://newlink.com');
 
 

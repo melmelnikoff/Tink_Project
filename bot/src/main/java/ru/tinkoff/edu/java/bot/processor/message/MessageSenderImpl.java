@@ -5,14 +5,12 @@ import com.pengrad.telegrambot.model.request.ParseMode;
 import com.pengrad.telegrambot.request.SendMessage;
 import freemarker.template.Configuration;
 import freemarker.template.Template;
-import lombok.RequiredArgsConstructor;
-import lombok.SneakyThrows;
-import org.springframework.stereotype.Component;
-
-
 import java.io.StringWriter;
 import java.io.Writer;
 import java.util.Map;
+import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
+import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
@@ -24,7 +22,6 @@ public class MessageSenderImpl implements MessageSender {
         return new SendMessage(update.message().chat().id(), text);
     }
 
-
     @Override
     @SneakyThrows
     public SendMessage sendTemplateId(Long tgChatId, String templateName, Map<String, Object> root) {
@@ -32,7 +29,7 @@ public class MessageSenderImpl implements MessageSender {
         Writer result = new StringWriter();
         template.process(root, result);
         return new SendMessage(tgChatId, result.toString())
-                .parseMode(ParseMode.HTML);
+            .parseMode(ParseMode.HTML);
     }
 
     @Override
@@ -42,6 +39,6 @@ public class MessageSenderImpl implements MessageSender {
         Writer result = new StringWriter();
         template.process(root, result);
         return new SendMessage(update.message().chat().id(), result.toString())
-                .parseMode(ParseMode.HTML);
+            .parseMode(ParseMode.HTML);
     }
 }

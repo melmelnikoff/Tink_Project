@@ -1,4 +1,2 @@
-<b>Available commands:</b>
-<#list commands as command>
-    ${command.command()}: ${command.description()}
-</#list>
+<b>Your links:</b>
+<a href="${link.url()}">${link.url()}</a>

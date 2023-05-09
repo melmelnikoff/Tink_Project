@@ -1,12 +1,14 @@
+TRUNCATE TABLE link RESTART IDENTITY CASCADE;
+
 INSERT INTO tg_chat(id, created_at)
-VALUES (1, now()),
-       (2, now());
+VALUES (11, now()),
+       (22, now());
 
 INSERT INTO link(url)
 VALUES ('https://url.com'),
        ('https://newurl.com');
 
 INSERT INTO subscription(tg_chat_id, link_id)
-VALUES (1, 1),
-       (1, 2),
-       (2, 1);
+VALUES (11, 1),
+       (11, 2),
+       (22, 1);

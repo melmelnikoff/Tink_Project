@@ -6,7 +6,7 @@ import ru.tinkoff.edu.java.bot.client.api.ScrapperClient;
 
 @Service
 @RequiredArgsConstructor
-public class ChatServiceImpl implements ChatService{
+public class ChatServiceImpl implements ChatService {
     private final ScrapperClient scrapperClient;
 
     @Override

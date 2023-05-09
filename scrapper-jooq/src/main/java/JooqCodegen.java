@@ -3,7 +3,7 @@ import org.jooq.meta.jaxb.*;
 
 public class JooqCodegen {
 
-    public static void main(String[] args) throws Exception{
+    public static void main(String[] args) throws Exception {
         Database database = new Database()
                 .withName("org.jooq.meta.extensions.liquibase.LiquibaseDatabase")
                 .withProperties(

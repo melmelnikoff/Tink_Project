@@ -9,7 +9,6 @@ public class StackOverflowWebClient implements StackOverflowClient {
     private static final String BASE_URL = "https://api.stackexchange.com/2.3/questions/";
     private static final String STACKOVERFLOW_MANDATORY_REQUEST_PARAMS = "?order=desc&sort=activity&site=stackoverflow";
 
-
     private final WebClient webClient;
     private final String baseUrl;
 
@@ -23,14 +22,13 @@ public class StackOverflowWebClient implements StackOverflowClient {
         this.baseUrl = baseUrl;
     }
 
-
     @Override
     public StackOverflowApiResponse fetchQuestion(String id) {
         return webClient
-                .get()
-                .uri(baseUrl + id + STACKOVERFLOW_MANDATORY_REQUEST_PARAMS)
-                .retrieve()
-                .bodyToMono(StackOverflowApiResponse.class)
-                .block();
+            .get()
+            .uri(baseUrl + id + STACKOVERFLOW_MANDATORY_REQUEST_PARAMS)
+            .retrieve()
+            .bodyToMono(StackOverflowApiResponse.class)
+            .block();
     }
 }

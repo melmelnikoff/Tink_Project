@@ -1,6 +1,5 @@
 package ru.tinkoff.edu.java.scrapper.controller;
 
-
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.openapitools.api.TgChatApi;
