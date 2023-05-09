@@ -1,9 +1,8 @@
 package ru.tinkoff.edu.java.scrapper.repository;
 
-import ru.tinkoff.edu.java.scrapper.entity.TgChat;
-
 import java.util.List;
 import java.util.Optional;
+import ru.tinkoff.edu.java.scrapper.entity.TgChat;
 
 public interface TgChatRepository {
     void save(TgChat tgChat);

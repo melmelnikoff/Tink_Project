@@ -1,6 +1,6 @@
 --liquibase formatted sql
 
---changeset melnikoff:add-link-table
+--changeset melmelnikoff:add-link-table
 create table if not exists link (
         id              bigint generated always as identity,
         url             text                     not null,

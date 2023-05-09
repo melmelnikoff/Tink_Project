@@ -1,10 +1,8 @@
 package ru.tinkoff.edu.java.scrapper.service;
 
-import ru.tinkoff.edu.java.scrapper.entity.Link;
-import ru.tinkoff.edu.java.scrapper.entity.TgChat;
-
 import java.net.URI;
 import java.util.Collection;
+import ru.tinkoff.edu.java.scrapper.entity.Link;
 
 public interface LinkService {
     Link add(long tgChatId, URI url);
@@ -13,5 +11,4 @@ public interface LinkService {
 
     Collection<Link> listAll(long tgChatId);
 
-    //Collection<TgChat> getChatsByLink(Link link);
 }

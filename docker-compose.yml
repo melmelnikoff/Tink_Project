@@ -13,9 +13,8 @@ services:
     networks:
       - backend
 
-#    volumes:
-#      - postgres-data:/var/lib/postgresql/data
-
+    volumes:
+      - postgresql-data:/var/lib/postgresql/data
 
 
   liquibase-migrations:
@@ -53,17 +52,13 @@ services:
       - rabbitmq-data:/var/lib/rabbitmq
 
 
-
-
-
-#volumes:
-#  postgresql-data:
-#    name: postgres-data-volume
-
 volumes:
+  postgresql-data:
+    name: postgres-data-volume
   rabbitmq-data:
     name: rabbitmq-data-volume
     driver: local
+
 
 networks:
   backend:

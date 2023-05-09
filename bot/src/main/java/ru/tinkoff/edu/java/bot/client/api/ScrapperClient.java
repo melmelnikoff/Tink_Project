@@ -1,10 +1,9 @@
 package ru.tinkoff.edu.java.bot.client.api;
 
-import ru.tinkoff.edu.java.bot.dto.LinkResponse;
-import ru.tinkoff.edu.java.bot.dto.ListLinksResponse;
-
 import java.net.URI;
 import java.util.Optional;
+import ru.tinkoff.edu.java.bot.dto.LinkResponse;
+import ru.tinkoff.edu.java.bot.dto.ListLinksResponse;
 
 public interface ScrapperClient {
 

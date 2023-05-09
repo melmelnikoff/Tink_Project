@@ -2,7 +2,7 @@ package ru.tinkoff.edu.java.bot.exception;
 
 import org.openapitools.model.ApiErrorResponse;
 
-public class ApiClientErrorException extends RuntimeException{
+public class ApiClientErrorException extends RuntimeException {
 
     private final ApiErrorResponse apiErrorResponse;
 

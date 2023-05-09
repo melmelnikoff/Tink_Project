@@ -2,7 +2,7 @@ package ru.tinkoff.edu.java.bot.exception;
 
 import org.openapitools.model.ApiErrorResponse;
 
-public class ApiInternalServerErrorException extends RuntimeException{
+public class ApiInternalServerErrorException extends RuntimeException {
     private final ApiErrorResponse apiErrorResponse;
 
     public ApiInternalServerErrorException(ApiErrorResponse apiErrorResponse) {

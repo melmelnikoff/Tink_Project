@@ -1,13 +1,19 @@
 package ru.tinkoff.edu.java.scrapper.entity;
 
-import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.experimental.Accessors;
-
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.ManyToMany;
+import jakarta.persistence.Table;
 import java.time.OffsetDateTime;
 import java.util.HashSet;
 import java.util.Set;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.experimental.Accessors;
 
 @Getter
 @Setter
@@ -34,8 +40,7 @@ public class Link {
     private Integer updatesCount;
 
     @ManyToMany(cascade = CascadeType.REMOVE,
-            mappedBy = "links")
+                mappedBy = "links")
     private Set<TgChat> tgChats = new HashSet<>();
-
 
 }
