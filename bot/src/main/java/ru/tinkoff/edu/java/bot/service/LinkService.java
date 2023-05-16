@@ -1,11 +1,9 @@
 package ru.tinkoff.edu.java.bot.service;
 
-import ru.tinkoff.edu.java.bot.dto.LinkResponse;
-import ru.tinkoff.edu.java.bot.dto.ListLinksResponse;
-
 import java.net.URI;
 import java.util.List;
 import java.util.Optional;
+import ru.tinkoff.edu.java.bot.dto.LinkResponse;
 
 public interface LinkService {
     List<LinkResponse> getAllLinks(Long tgChatId);

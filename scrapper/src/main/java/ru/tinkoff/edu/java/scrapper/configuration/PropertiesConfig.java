@@ -16,5 +16,4 @@ public class PropertiesConfig {
         return config.scheduler().limit();
     }
 
-
 }

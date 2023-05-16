@@ -8,7 +8,7 @@ app:
 
   exchange-name: exchange
 
-  use-queue: true
+  use-queue: false
 
 server:
   port: 8081

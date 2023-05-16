@@ -1,6 +1,5 @@
 package ru.tinkoff.edu.java.scrapper.jdbc;
 
-
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -13,11 +12,9 @@ import ru.tinkoff.edu.java.scrapper.entity.Link;
 import ru.tinkoff.edu.java.scrapper.repository.jdbc.JdbcLinkRepository;
 import ru.tinkoff.edu.java.scrapper.repository.jdbc.JdbcSubscriptionRepository;
 import ru.tinkoff.edu.java.scrapper.repository.jdbc.JdbcTgChatRepository;
-
-import static java.time.OffsetDateTime.now;
-import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @SpringBootTest
 public class JdbcSubscriptionRepositoryTest extends IntegrationEnvironment {
@@ -37,8 +34,8 @@ public class JdbcSubscriptionRepositoryTest extends IntegrationEnvironment {
     @Sql("/sql/add_subscriptions.sql")
     public void findLinksByChatId__dbHasLinksById_success() {
         assertAll(
-                () -> assertThat(subscriptionRepository.findLinksByChatId(1L)).hasSize(2),
-                () -> assertThat(subscriptionRepository.findLinksByChatId(2L)).hasSize(1)
+            () -> assertThat(subscriptionRepository.findLinksByChatId(11L)).hasSize(2),
+            () -> assertThat(subscriptionRepository.findLinksByChatId(22L)).hasSize(1)
 
         );
     }
@@ -49,8 +46,8 @@ public class JdbcSubscriptionRepositoryTest extends IntegrationEnvironment {
     @Sql("/sql/add_subscriptions.sql")
     public void findChatsByLinkId__dbHasChatsById_success() {
         assertAll(
-                () -> assertThat(subscriptionRepository.findChatsByLinkId(1L)).hasSize(2),
-                () -> assertThat(subscriptionRepository.findChatsByLinkId(2L)).hasSize(1)
+            () -> assertThat(subscriptionRepository.findChatsByLinkId(1L)).hasSize(2),
+            () -> assertThat(subscriptionRepository.findChatsByLinkId(2L)).hasSize(1)
 
         );
     }
@@ -64,12 +61,11 @@ public class JdbcSubscriptionRepositoryTest extends IntegrationEnvironment {
         Link link = linkRepository.findById(2L).orElseThrow();
 
         //when
-        subscriptionRepository.addLinkToChat(2L, link);
+        subscriptionRepository.addLinkToChat(22L, link);
 
         //then
-        assertThat(subscriptionRepository.findLinksByChatId(2L)).hasSize(2);
+        assertThat(subscriptionRepository.findLinksByChatId(22L)).hasSize(2);
     }
-
 
     @Test
     @Transactional
@@ -78,8 +74,10 @@ public class JdbcSubscriptionRepositoryTest extends IntegrationEnvironment {
     void addLinkToChat__chatAlreadyHasLink_throws() {
         Link link = linkRepository.findAll().get(0);
 
-        assertThatThrownBy(() -> subscriptionRepository.addLinkToChat(1L, link))
-                .isInstanceOf(DataAccessException.class);
+        assertThrows(
+            DataAccessException.class,
+            () -> subscriptionRepository.addLinkToChat(11L, link)
+        );
     }
 
     @Test
@@ -91,10 +89,10 @@ public class JdbcSubscriptionRepositoryTest extends IntegrationEnvironment {
         Link link = linkRepository.findById(2L).orElseThrow();
 
         //when
-        subscriptionRepository.deleteLinkFromChat(1L, link);
+        subscriptionRepository.deleteLinkFromChat(11L, link);
 
         //then
-        assertThat(subscriptionRepository.findLinksByChatId(2L)).hasSize(1);
+        assertThat(subscriptionRepository.findLinksByChatId(22L)).hasSize(1);
     }
 }
 

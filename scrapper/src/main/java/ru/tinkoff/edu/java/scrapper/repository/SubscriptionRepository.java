@@ -1,9 +1,8 @@
 package ru.tinkoff.edu.java.scrapper.repository;
 
+import java.util.List;
 import ru.tinkoff.edu.java.scrapper.entity.Link;
 import ru.tinkoff.edu.java.scrapper.entity.TgChat;
-
-import java.util.List;
 
 public interface SubscriptionRepository {
     List<Link> findLinksByChatId(Long id);
@@ -13,6 +12,5 @@ public interface SubscriptionRepository {
     void addLinkToChat(Long chatId, Link link);
 
     void deleteLinkFromChat(Long chatId, Link link);
-
 
 }

@@ -1,14 +1,12 @@
 package ru.tinkoff.edu.java.scrapper.service.jdbc;
 
+import java.time.OffsetDateTime;
 import lombok.RequiredArgsConstructor;
 import org.springframework.transaction.annotation.Transactional;
 import ru.tinkoff.edu.java.scrapper.entity.TgChat;
 import ru.tinkoff.edu.java.scrapper.exception.ResourceNotFoundException;
 import ru.tinkoff.edu.java.scrapper.repository.jdbc.JdbcTgChatRepository;
 import ru.tinkoff.edu.java.scrapper.service.TgChatService;
-
-import java.time.OffsetDateTime;
-
 
 @RequiredArgsConstructor
 public class JdbcTgChatService implements TgChatService {
@@ -24,7 +22,7 @@ public class JdbcTgChatService implements TgChatService {
     @Override
     public void unregister(long tgChatId) {
         TgChat tgChat = tgChatRepository.findById(tgChatId).orElseThrow(
-                () -> new ResourceNotFoundException("chat doesn't exists")
+            () -> new ResourceNotFoundException("chat doesn't exists")
         );
         tgChatRepository.deleteById(tgChat.getId());
 

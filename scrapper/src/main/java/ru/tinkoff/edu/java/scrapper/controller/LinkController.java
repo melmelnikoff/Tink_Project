@@ -1,7 +1,10 @@
 package ru.tinkoff.edu.java.scrapper.controller;
 
-
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.Collection;
 import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
 import org.openapitools.api.LinksApi;
 import org.openapitools.model.AddLinkRequest;
 import org.openapitools.model.LinkResponse;
@@ -15,64 +18,62 @@ import ru.tinkoff.edu.java.scrapper.exception.DuplicateLinkException;
 import ru.tinkoff.edu.java.scrapper.exception.ResourceNotFoundException;
 import ru.tinkoff.edu.java.scrapper.service.LinkService;
 
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.util.Collection;
-
 @RestController
 @RequiredArgsConstructor
 public class LinkController implements LinksApi {
 
     private final LinkService linkService;
 
-
     @Override
+    @SneakyThrows
     public ResponseEntity<LinkResponse> linksDelete(Long tgChatId, RemoveLinkRequest removeLinkRequest)
-            throws ResourceNotFoundException, URISyntaxException {
+        throws ResourceNotFoundException {
 
         Link link = linkService.remove(tgChatId, removeLinkRequest.getLink());
         return ResponseEntity.status(HttpStatus.OK)
-                .body(convertToLinkResponse(link));
+            .body(convertToLinkResponse(link));
     }
 
     @Override
     public ResponseEntity<ListLinksResponse> linksGet(Long tgChatId)
-            throws ResourceNotFoundException, URISyntaxException {
+        throws ResourceNotFoundException {
 
         Collection<Link> links = linkService.listAll(tgChatId);
         return ResponseEntity.status(HttpStatus.OK)
-                .body(convertToListLinkResponse(links));
+            .body(convertToListLinkResponse(links));
     }
 
-
     @Override
+    @SneakyThrows
     public ResponseEntity<LinkResponse> linksPost(Long tgChatId, AddLinkRequest addLinkRequest)
-            throws DuplicateLinkException, URISyntaxException {
+        throws DuplicateLinkException {
 
         Link link = linkService.add(tgChatId, addLinkRequest.getLink());
         return ResponseEntity.status(HttpStatus.OK)
-                .body(convertToLinkResponse(link));
+            .body(convertToLinkResponse(link));
     }
-
 
     private LinkResponse convertToLinkResponse(Link link) throws URISyntaxException {
-        return LinkResponse.builder()
-                .id(link.getId())
-                .url(URI.create(link.getUrl()))
-                .build();
+        LinkResponse linkResponse = new LinkResponse();
+        linkResponse.setId(link.getId());
+        linkResponse.setUrl(URI.create(link.getUrl()));
+        return linkResponse;
+
     }
 
-    private ListLinksResponse convertToListLinkResponse(Collection<Link> linksToResponse) throws URISyntaxException {
-        return ListLinksResponse.builder()
-                .links(linksToResponse.stream().map(link -> {
-                    try {
-                        return convertToLinkResponse(link);
-                    } catch (URISyntaxException e) {
-                        throw new RuntimeException(e);
-                    }
-                }).toList())
-                .size(linksToResponse.size())
-                .build();
+    private ListLinksResponse convertToListLinkResponse(Collection<Link> linksToResponse) {
+        ListLinksResponse listLinksResponse = new ListLinksResponse();
+        listLinksResponse.setLinks(
+            linksToResponse.stream().map(link -> {
+                try {
+                    return convertToLinkResponse(link);
+                } catch (URISyntaxException e) {
+                    throw new RuntimeException(e);
+                }
+            }).toList()
+        );
+        listLinksResponse.setSize(linksToResponse.size());
+        return listLinksResponse;
     }
 
 }
